@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HTML EDITOR</title>
+        <meta charset="utf-8">
+        <style>
+body{margin:0}
+#ribbon input[type="number"] {
+    width: 50px;
+}
+#ribbon select, #ribbon input {
+    height: 1.5em;
+    width: 4.5em
+}
+#ribbon {
+    width: 100%;
+    display: flex;
+    height: 9.375em;
+    background-color: #f2f2f2;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#ribbon p{
+    width: 80px
+}
+#ribbon endl{
+    width: 100% !important;
+    height: 1px !important;
+}
+#editor {
+    display: block;
+    margin: 8px;
+}
+        </style>
+    </head>
+    <body>
+        <div id="ribbon">
+            <p style="display: inline;margin:0">タグ：</p>
+            <input type="text" id="tag">
+            <endl></endl>
+            <p style="display: inline;margin:0 0 0 80px;width:200px">&nbsp;&nbsp;&nbsp;top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left&nbsp;&nbsp;&nbsp;bottom&nbsp;&nbsp;right</p>
+            <endl></endl>
+            <p style="display: inline;margin:0">margin：</p>
+            <input type="number" id="margin-top" value="0">
+            <input type="number" id="margin-left" value="0">
+            <input type="number" id="margin-bottom" value="0">
+            <input type="number" id="margin-right" value="0">
+            <endl></endl>
+            <p style="display: inline;margin:0">padding：</p>
+            <input type="number" id="padding-top" value="0">
+            <input type="number" id="padding-left" value="0">
+            <input type="number" id="padding-bottom" value="0">
+            <input type="number" id="padding-right" value="0">
+            <endl></endl>
+            <input type="button" onclick="add()" value="add">
+            <endl style="width:calc(320px - 4.5em) !important;"></endl>
+            <textarea id="css" style="margin-left:10px;max-width:12.5%;max-height: 140px;min-width:12.5%;min-height: 140px;margin-top: -120px;"></textarea>
+            <textarea id="html" style="margin-left:10px;max-width:25%;max-height: 140px;min-width:25%;min-height: 140px;margin-top: -120px;"></textarea>
+            <input type="text" id="class" placeholder="classes" style="margin-top: -120px;">
+            <input type="text" id="id" placeholder="ids" style="margin-top: calc(-120px + 2em);margin-left: calc(-5em - 1px);">
+        </div>
+        <style id="incss"></style>
+        <div id="editor">
+
+        </div>
+        <script>
+            const html = document.getElementById("html")
+            const css = document.getElementById("css")
+            const editor = document.getElementById("editor")
+            let elements = ""
+            function add() {
+                const tag = document.getElementById("tag")
+                if (tag.value.toLowerCase() == "script") {html.value = elements += "<strong>Oops! Can't use 'script' tag! After export, edit exported html file then add 'script' tag.</strong>";editor.insertAdjacentHTML("beforeend", "<strong>Oops! Can't use 'script' tag! After export, edit exported html file then add 'script' tag.</strong>");return;}
+                if (tag.value.toLowerCase() == "style") { html.value = elements += "<strong>Oops! Can't use 'style' tag! Use the input form of css for editing css.</strong>";editor.insertAdjacentHTML("beforeend", "<strong>Oops! Can't use 'style' tag! Use the input form of css for editing css.</strong>");return;}
+                const id = document.getElementById("id")
+                const htmlclass = document.getElementById("class")
+                const margin = {top:document.getElementById("margin-top"),left:document.getElementById("margin-left"),bottom:document.getElementById("margin-bottom"),right:document.getElementById("margin-right")}
+                const padding = {top:document.getElementById("padding-top"),left:document.getElementById("padding-left"),bottom:document.getElementById("padding-bottom"),right:document.getElementById("padding-right")}
+                editor.insertAdjacentHTML("beforeend", `<${tag.value} id="${id.value}" class="${htmlclass.value}" style="margin: ${margin.top.value}px ${margin.right.value}px ${margin.bottom.value}px ${margin.left.value}px; padding: ${padding.top.value}px ${padding.right.value}px ${padding.bottom.value}px ${padding.left.value}px"></${tag.value}>`)
+                elements += `<${tag.value} id="${id.value}" class="${htmlclass.value}" style="margin: ${margin.top.value}px ${margin.right.value}px ${margin.bottom.value}px ${margin.left.value}px; padding: ${padding.top.value}px ${padding.right.value}px ${padding.bottom.value}px ${padding.left.value}px"></${tag.value}>\n`
+                html.value = elements
+                id.value = ""
+                htmlclass.value = ""
+            }
+
+            html.addEventListener("input", ev=>{
+                elements = html.value
+                editor.innerHTML = `${elements}`
+            })
+
+            css.addEventListener("input", ev=>{
+                const incss = document.getElementById("incss")
+                css.value = css.value.replace(/\#/g, "")
+                incss.innerText = "";
+                incss.appendChild(document.createTextNode(css.value));
+            })
+        </script>
+    </body>
+</html>
