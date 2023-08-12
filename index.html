@@ -84,6 +84,7 @@ body{margin:0}
             }
 
             html.addEventListener("input", ev=>{
+                html.value = html.value.replace(/\<script\>|\<style\>/g, "")
                 elements = html.value
                 editor.innerHTML = `${elements}`
             })
